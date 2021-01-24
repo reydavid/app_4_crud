@@ -19,27 +19,29 @@ export class Create extends Component {
     onSubmit(e){
         e.preventDefault();
         console.log("Submitted", e);
+        this.setState({
+            who: '',
+            what: '',
+            where: '',
+            when: ''
+        })
     }
     onChangeWho(e){
-        console.log("E.target.value:", e.target.value);
         this.setState({
             who: e.target.value,
         })
     }
     onChangeWhat(e){
-        console.log("E.target.value:", e.target.value);
         this.setState({
             what: e.target.value,
         })
     }
     onChangeWhere(e){
-        console.log("E.target.value:", e.target.value);
         this.setState({
             where: e.target.value,
         })
     }
     onChangeWhen(e){
-        console.log("E.target.value:", e.target.value);
         this.setState({
             when: e.target.value,
         })
