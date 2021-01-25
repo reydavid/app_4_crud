@@ -26,8 +26,8 @@ crudRoutes.route('/add').post(function(req,res){
         what: "TestWhat",
         where: "TestWhere",
         when: "TestWhen"
-    }
-    
+    };
+
     let newCrud = new crud(testCrud);
     newCrud.save()
     .then(crud => {

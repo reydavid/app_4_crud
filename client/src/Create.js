@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Button, FormGroup, Form } from 'reactstrap';
+import axios from 'axios';
 
 export class Create extends Component {
     constructor(props){
@@ -18,7 +19,17 @@ export class Create extends Component {
     }
     onSubmit(e){
         e.preventDefault();
+
+        const newCrud = {
+            who: this.state.who,
+            what: this.state.what,
+            where: this.state.where,
+            when: this.state.when
+        };
         console.log("Submitted", e);
+        axios.post('http://localhost:3001/add', newCrud)
+            .then(res=>console.log(res.data));
+
         this.setState({
             who: '',
             what: '',
