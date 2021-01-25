@@ -9,7 +9,7 @@ export class Read extends Component {
                 <Table size="sm" variant="dark">
                     <thead>
                         <tr>
-hi                            {/* {this.state.name} */}
+<h2>test</h2>                            {/* {this.state.name} */}
                         </tr>    
                     </thead>
                 </Table>
