@@ -1,49 +1,52 @@
-const express = require('express');
-const app = express();
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
-const port = '3500';
-const connection = mongoose.connection;
-const crudRoutes = express.Router();
-let crud = require('./model');
+let express = require('express');
+let mongoose = require('mongoose');
+let cors = require('cors');
+let bodyParser = require('body-parser');
+let dbConfig = require('./database/db');
 
-mongoose.connect('mongodb+srv://david:davidtest123@cluster0.00hbc.mongodb.net/app_4_crud?retryWrites=true&w=majority', {useNewUrlParser:true})
-connection.once('open', function(){
-    console.log('Mongoose connection established...')
-});
+// Express Route
+const contactRoute = require('./routes/contact.route')
 
-app.use(cors());
+// Connecting mongoDB Database
+mongoose.Promise = global.Promise;
+mongoose.connect(dbConfig.db, {
+useNewUrlParser: true
+}).then(() => {
+console.log('Database sucessfully connected!')
+},
+error => {
+console.log('Could not connect to database : ' + error)
+}
+)
+
+const app = express(); 
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({
+extended: true
+}));
+app.use(cors());
+app.use('/api', contactRoute)
 
-crudRoutes.route('/').get(function(req,res){
-    res.send({message: "crudRoutes!"});
-});
 
-crudRoutes.route('/add').post(function(req,res){
-    let testCrud = {
-        who: "TestWho",
-        what: "TestWhat",
-        where: "TestWhere",
-        when: "TestWhen"
-    };
-
-    let newCrud = new crud(testCrud);
-    newCrud.save()
-    .then(crud => {
-        res.json({'crud': "added successfully"});
-    })
-    .catch(err => {
-        res.send(err);
-    })
-    res.send(req.body);
+// PORT
+const port = process.env.PORT || 3500;
+const server = app.listen(port, () => {
+    console.log('Connected to port ' + port)
 })
 
-app.get('/', function(req,res){
-    console.log("root");
-    res.send({message:"Server is running..."})
+// simple route
+app.get("/", (req, res) => {
+    res.json({ message: "Welcome to my web server." });
+  });
+// 404 Error
+app.use((req, res, next) => {
+    res.writeHead(200, {'Content-Type': 'text/plain'});
+    res.end('Server Started!');
+    // next(createError(404));
 });
 
-app.listen(port,function(req,res){
-    console.log("Listening on port",port);
+app.use(function (err, req, res, next) {
+console.error(err.message);
+if (!err.statusCode) err.statusCode = 500;
+res.status(err.statusCode).send(err.message);
 });
