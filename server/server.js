@@ -1,16 +1,17 @@
-let express = require('express');
-let mongoose = require('mongoose');
-let cors = require('cors');
-let bodyParser = require('body-parser');
-let dbConfig = require('./database/db');
-
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const bodyParser = require('body-parser');
+// const dbConfig = require('./database/db');
+const uri = "mongodb+srv://david:davidtest123@cluster0.00hbc.mongodb.net/app_4_crud?retryWrites=true&w=majority";
 // Express Route
 const contactRoute = require('./routes/contact.route')
 
 // Connecting mongoDB Database
 mongoose.Promise = global.Promise;
-mongoose.connect(dbConfig.db, {
-useNewUrlParser: true
+mongoose.connect(uri, {
+useNewUrlParser: true,
+useUnifiedTopoloty: true
 }).then(() => {
 console.log('Database sucessfully connected!')
 },
@@ -29,14 +30,14 @@ app.use('/api', contactRoute)
 
 
 // PORT
-const port = process.env.PORT || 3500;
+const port = process.env.PORT || 8000;
 const server = app.listen(port, () => {
     console.log('Connected to port ' + port)
 })
 
 // simple route
 app.get("/", (req, res) => {
-    res.json({ message: "Welcome to my web server." });
+    res.json({ message: "Server is connected" });
   });
 // 404 Error
 app.use((req, res, next) => {
